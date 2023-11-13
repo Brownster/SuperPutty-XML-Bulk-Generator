@@ -23,10 +23,10 @@ def generate_putty_sessions_xml(df, group_name, match_value):
 
     # Define the folder mapping based on the match_value
     folder_mapping = {
-        'exporter_linux': 'Linux Server',
-        'exporter_gateway': 'Media Gateway',
-        'exporter_windows': 'Windows Server',
-        'exporter_verint': 'Verint Server',
+        'exporter_linux': 'Linux Servers',
+        'exporter_gateway': 'Media Gateways',
+        'exporter_windows': 'Windows Servers',
+        'exporter_verint': 'Verint Servers',
         
     }
     
@@ -79,7 +79,8 @@ def bulk_csv_to_xml(csv_folder, output_folder, mapping_csv_path):
     options = [
         ("exporter_linux", "Linux"),
         ("exporter_windows", "Windows"),
-        ("exporter_gateway", "Gateway")
+        ("exporter_gateway", "Gateway"),
+        ("exporter_verint", "Verint")
     ]
 
     success_count = 0
@@ -94,7 +95,7 @@ def bulk_csv_to_xml(csv_folder, output_folder, mapping_csv_path):
 
 
             for match_value, suffix in options:
-                column_name = 'Exporter_name_os' if 'linux' in match_value or 'windows' in match_value else 'Exporter_name_app'
+                column_name = 'Exporter_name_os' if 'linux' in match_value or 'windows' in match_value or 'verint' in match_value else 'Exporter_name_app'
                 group_name = friendly_name
                 xml_file_name = f"{friendly_name}-{suffix}.xml"
                 xml_file_path = os.path.join(output_folder, xml_file_name)
