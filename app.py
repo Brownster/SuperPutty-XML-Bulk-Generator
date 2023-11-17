@@ -44,18 +44,26 @@ def generate_putty_sessions_xml(df, group_name, match_value):
         session_data.set('Host', row['IP Address'])
 
         # Set protocol-specific session data
-        if match_value in ['exporter_windows', 'exporter_verint']:
-            # Default RDP port is 3389
+        if match_value == 'exporter_windows':
+            session_data.set('ImageKey', 'windows')
             session_data.set('Port', '3389')
             session_data.set('Proto', 'RDP')
-            # Username is not available for Windows servers
+        elif match_value == 'exporter_verint':
+            session_data.set('ImageKey', 'verint')
+            session_data.set('Port', '3389')
+            session_data.set('Proto', 'RDP')
         else:
-            # Default SSH port is 22
+            session_data.set('ImageKey', 'tux')
             session_data.set('Port', '22')
             session_data.set('Proto', 'SSH')
             session_data.set('PuttySession', 'Default Settings')
             if pd.notna(row['ssh_username']) and str(row['ssh_username']).strip():
                 session_data.set('Username', str(row['ssh_username']))
+
+        # Add the Secret Server URL
+        secret_server_url = row.get('Secret Server', None)
+        if secret_server_url:
+            ET.SubElement(session_data, 'SPSLFileName').text = secret_server_url
 
     return prettify_xml(root)
 
